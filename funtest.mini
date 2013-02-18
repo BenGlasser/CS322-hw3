@@ -1,0 +1,23 @@
+  void mini_main() {       // compiler requires mini_main
+      print foo(1,2);      // should show 1
+      print bar(3,4);      // should show 4
+      print baz(5,6,7);    // should show 18 (= 5 + 6 + 7)
+  }
+
+  int foo(int x, int y) {  //    foo: pushl   %ebp
+    return x;              //         movl    %esp,%ebp
+  }                        //         movl    8(%ebp),%eax
+                           //         movl    %ebp,%esp
+                           //         popl    %ebp
+                           //         ret
+
+  int bar(int x, int y) {  //    bar: pushl   %ebp
+    return y;              //         movl    %esp,%ebp
+  }                        //         movl    12(%ebp),%eax
+                           //         movl    %ebp,%esp
+                           //         popl    %ebp
+                           //         ret
+
+  int baz(int x, int y, int z) {
+     return x + y + z;
+  }

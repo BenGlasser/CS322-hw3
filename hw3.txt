@@ -1,0 +1,210 @@
+------------------------------------------------------------------------
+CS322 Languages and Compiler Design II                        Homework 3
+------------------------------------------------------------------------
+
+[This homework assignment is due at the start of class on TUESDAY, Feb 19
+on paper, or by by noon that same day if you submit by email.  Please be
+sure to follow the guidelines for homework submission on the class web
+page (and make sure that you familiarize yourself with those guidelines
+well ahead of the deadline), especially if you are planning to submit via
+email.]
+
+This homework is intended to give you some experience working with code
+generation techniques in the context of the MiniFun compiler that has been
+discussed in class.  There are two major parts to this question, the first
+having to do with implementing code generation for "for" loops, and the
+second having to do with the implementation of call-by-reference parameter
+passing.  You may find these exercises challenging, in particular, because
+they will require you to dig in to details of the MiniFun implementation
+that you may not have looked at prior to this exercise.  You should expect
+to spend some non trivial amount of time reading and tracing through the
+MiniFun sources and reference materials; please be sure to allow for that
+as you plan your time on this assignment.  Notice also that I have set a
+longer deadline for this assignment so that you have more time to work on
+it, and also more time to ask for help if you get stuck or have any
+questions.
+
+As always, you will be expected to test your solutions, and to include
+evidence of testing as part of your submitted answer.  As an experiment,
+however, and prompted by earlier discussions on the forums, I am also
+going to allow/encourage students to share and use test cases posted on
+the forums; I will create specific discussion threads to be used for
+sharing these details.  Posting and use of shared test cases will be
+entirely voluntary.  Nobody will be required either to post their own test
+cases, or to evaluate their solution against any or all of the test cases
+that are shared in this way.  There will not be any bonus credit for
+sharing test cases in this way, but the hope is that people will still
+choose to share their test cases, and that there will be more
+opportunities to learn from other students as a result.  Note however,
+that this only applies to test cases, and that INDIVIDUAL SOLUTIONS to the
+problems, as with other assignments and following the guidelines for
+academic integrity, SHOULD NOT BE SHARED.
+
+There are several resources that are likely to be helpful to you in
+completing this assignment, including:
+
+- The enclosed README file (from the MiniFun distribution)
+
+- Source code in the compiler and mini folders.  These files are
+  derived from the original MiniFun sources, but I have already
+  added the necessary extensions to the lexical analyzer, parser,
+  abstract syntax, and static analysis components so that you need
+  only focus on code generation.  The included source code should
+  compile as provided, but it only includes stubs for the missing
+  components that you are expected to provide in this assignment,
+  so do not expect it to handle the new features until you have
+  added the appropriate new code and/or made changes to the
+  existing code.
+
+- The abstract syntax class for "for" loops that are used in the
+  attached source files are described in the solutions to last term's
+  CS321 HW4 assignment, which is available at:
+
+    http://web.cecs.pdx.edu/~mpj/cs321/MiniFor.pdf
+
+- Details about static analysis for "for" loops are described in
+  the solutions to last term's CS321 HW5 assignment, which is also
+  available at:
+
+    http://web.cecs.pdx.edu/~mpj/cs321/MiniStatic.pdf
+
+  (The solution for Question 3, in particular, is most relevant if
+  you would like additional background material on the abstract
+  syntax classes for "for" loops.)
+
+- An extended class log entry for Lecture 7 on the theme of compilation
+  schemes and, in particular, code generation for "for" loops, is
+  available on the forums at:
+
+    http://web.cecs.pdx.edu/~mpj/cs322/forums/viewtopic.php?f=7&t=40
+
+- Details about the implementation of functions in MiniFun are
+  available from the CS322 class web page or directly at:
+
+    http://web.cecs.pdx.edu/~mpj/cs322/MiniFun.pdf
+
+  (The unmodified MiniFun implementation is also available from the
+  class web page if you want to refer to that.)
+
+And, of course, please ask (on the forums, during office hours, in class,
+in person, ...) if you get stuck and need further help or clarification!
+
+------------------------------------------------------------------------
+Your answers to the following question should be presented in the form of
+a single, written document, that provides a narrative to explain the
+changes that are required to implement the features described in these
+questions, and the testing that you have done to establish that they are
+working correctly.  Think of your document as providing a tutorial, aimed
+at people like you and your classmates, that explains not just the "what"
+part, but also the "why" part of what you have done.
+
+
+Question 1:
+-----------
+Your first task is to extend the supplied source code for the Mini
+compiler so that it will produce correct code for "for" loops.  (One
+simple example using a for loop is provided in the Mini source file
+for.mini.)
+
+You will find an initial stub for this in the compile() method of the For
+class in mini/For.java, but you should expect to make changes in other
+parts of the code too, particularly in the classes (ForInit, NoInit,
+ExprInit, and VarDeclInit) that are used to describe the abstract syntax
+of for loop initializers.
+
+If you are not sure how to get started on this exercise, then you might
+want to begin by reviewing the code for while loops (in the file
+mini/While.java) and comparing that with the alternative notation for
+compilation schemes that we have used in class.
+
+Question 2:
+-----------
+Once you have completed your answer to Question 1, your next task is to
+implement the "break" and "continue" statements, using the code in
+mini/Break.java and mini/Continue.java, respectively, as your starting
+point.  (You should note that the static analysis components of the
+supplied code have already been modified to ensure that neither one of
+these two statement forms can be used outside a loop.)  To complete this
+assignment, however, you will need to make changes in multiple additional
+source files.  You may try to identify the files where changes are needed
+ahead of time, or you can use the error messages produced by the Java
+compiler to help lead you to the right places.
+
+Note that you should test your implementation of "break" and "continue" to
+ensure that it works correctly with both "for" loops and "while" loops.
+
+Question 3:
+-----------
+The final task for this assignment is to extend the code generator in the
+MiniFun compiler to support passing of parameters by reference.  The
+parser in the supplied code has already been modified to support a
+(C++-inspired) syntax for call-by-reference by placing an & character
+between the type and the name in each formal parameter that should be
+passed by reference.  The following example illustrates this syntax (and
+there is a slightly larger example included in byref.mini):
+
+   int f(int& x) { x = x+1; }
+
+The static analysis components of the supplied compiler have also been
+modified to propagate the details about call-by-reference parameters in to
+variable environment (VarEnv) and argument list (Args) objects.  Static
+analysis also checks that each variable that is referenced in the source
+program (represented by the Id class) is annotated with a pointer, ve, to
+the specific environment entry for that variable.  What this means in
+practice, is that you can test to see if a particular variable should be
+passed by reference from code within mini/Id.java by testing to see if
+ve.isByRef() returns true.  (A false value indicates that call-by-value
+should be used instead.)  In a similar way, while looping through a list
+of arguments from code within mini/Args.java, you can test to see if a
+particular argument should be passed by reference by testing to see if the
+isByRef() method returns true.
+
+What remains is for you to modify the code generation rules for the Id
+(accessing a variable), Assign (saving a value in a variable), and Call
+(passing values or references to functions) classes to make proper use of
+this information.
+
+For example, in an Id object for a by-reference parameter, the
+corresponding slot in the stack frame will contain the address of the
+variable that is being referenced, and not the actual value of the
+variable.  As such, two steps are needed to access the variable's value:
+first load the address from the stack frame, and then load the destination
+register with the contents of that address.  Similar pointer manipulations
+are required for an assignment in which the left hand side is a
+call-by-reference parameter.
+
+The trickiest part of this assignment will be in modifying the compilation
+rule in mini/Call.java (with changes likely elsewhere, particularly in
+mini/Args.java) to handle by-reference parameters.  Conceptually, the key
+idea here is that you will need to pass the *address* of any argument that
+is specified as a call-by-reference parameter, instead of just passing the
+value.  The problem here is that only works when the actual value passed
+in is a variable.  When any other form of expression is used as a
+by-reference parameter, the code generated for Call will need to evaluate
+the expression, save the result in a new variable, and then pass the
+address of that new variable to the function that is being called.
+
+Although you are welcome to experiment with other approaches, the strategy
+that I would suggest for this is as follows:
+
+- Start by scanning the argument list to calculate the number of
+  bytes that will be needed for new variables passed by reference (i.e.,
+  for arguments that are not simple variables, but are expected to be
+  passed by reference).
+
+- Modify the stack layout that is used by the current implementation
+  of Call to include the appropriate amount of extra space to hold these
+  "new variables".  (Be sure to read the discussion about stack layout in
+  MiniFun.pdf!)  I would encourage you to place this extra storage
+  immediately above the area that is used for passing parameters.
+
+- Loop through the actual parameter values, saving the results and
+  setting parameter values as appropriate for each case.
+
+This might all sound quite complicated, but make sure you've understood
+the existing implementation first (trying to skip that step will set you
+back a long way!) and then you'll find that this doesn't actually require
+a lot of new code.  (And, if you find it useful, feel free to add another
+compilation scheme to help in this task.)
+
+------------------------------------------------------------------------

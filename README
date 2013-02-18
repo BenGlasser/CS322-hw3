@@ -1,0 +1,71 @@
+Welcome to this README file
+---------------------------
+
+Thank you for reading me!
+
+This package contains Java sources (including components using jacc
+and jflex) for the front and back ends of a mini imperative language
+compiler.  We'll refer to the language that this compiler accepts as
+"Mini" in the rest of this document.
+
+CONTENTS:
+---------
+You'll find the bulk of the source code for the Mini compiler in the
+"mini" subdirectory; the compiler also uses parts of the code in the
+"compiler" subfolder, which provides a more general library of
+classes for describing and implementing compiler phases, error
+handling, etc..  Some additional items included in this package are
+as follows:
+
+life.mini and funs.mini:
+  Two simple Mini programs.  These programs contain valid Mini
+  syntax, but wouldn't it be nice if we could compile and then run
+  them to see if they also work as we might expect ... ?
+
+runtime.c:
+  A (very) simple runtime library for use with compiled Mini code.
+
+Makefile:
+  A simple, pattern-based Makefile to simplify the compilation of
+  Mini programs.  With the appropriate version of make, you should
+  be able to go from prog.mini to an executable prog by using a
+  command of the form "make prog".
+
+BUILDING & RUNNING:
+-------------------
+On my machine, I can build the Mini compiler as follows:
+
+  - First run jacc and jflex to build the lexer and parser.  YOU
+    SHOULDN'T NEED TO DO THIS because I'm including the generated
+    code already.  However, for completness, here are the command
+    lines that I use:
+
+     jacc mini/Mini.jacc
+     jflex mini/Mini.jflex 
+
+  - Edit Line 24 of the code in mini/Assembly.java to specify
+    your target platform.  The current choices are LINUX, WINDOWS,
+    and MACOSX, so the corrected line should look something like
+    platform = LINUX, platform = WINDOWS, or platform = MACOSX.
+    Do not expect what follows to work correctly if you have not
+    followed this step!
+
+  - Now compile the Java sources, including both generated and
+    handwritten components:
+
+     javac compiler/*.java mini/*.java
+
+For testing, I use commands like the following:
+
+  java mini.Compiler life.mini life.s
+  gcc -m32 -o life life.s runtime.c
+  ./life
+
+  java mini.Compiler funs.mini funs.s
+  gcc -m32 -o funs funs.s runtime.c
+  ./funs
+
+The first line in each case invokes the Mini compiler to produce
+an assembly code output file.  The second uses gcc to link the
+resulting code with the runtime library.  The third runs the
+resulting code.

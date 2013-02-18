@@ -1,0 +1,23 @@
+void mini_main() {
+  int x = 0;
+
+  byref(x);
+  print x;
+
+  byval(x);
+  print x;
+
+  byref(6*7);
+  byval(6*7);
+}
+
+void byref(int& y) {
+  y = y + 1;
+  print y;
+}
+
+void byval(int y) {
+  y = y + 1;
+  print y;
+}
+
