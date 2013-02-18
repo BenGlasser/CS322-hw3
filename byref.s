@@ -53,7 +53,12 @@ mini_main:
 	movl	%eax,-4(%ebp)
 	subl	$4,%esp
 	movl	-4(%ebp),%eax
-	movl	%eax,(%esp)
+	
+# comp args **********************************
+	movl	(%esp),%ecx
+	movl	%eax,(%ecx)
+	#************************************************
+
 	call	byref
 	addl	$4,%esp
 	movl	-4(%ebp),%eax
@@ -70,7 +75,12 @@ mini_main:
 	movl	$7,%eax
 	movl	$6,%ecx
 	imull	%ecx,%eax
-	movl	%eax,(%esp)
+	
+# comp args **********************************
+	movl	(%esp),%ecx
+	movl	%eax,(%ecx)
+	#************************************************
+
 	call	byref
 	addl	$4,%esp
 	movl	$7,%eax
