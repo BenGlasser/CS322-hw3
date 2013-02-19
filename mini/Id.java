@@ -61,7 +61,7 @@ class Id extends Expr {
             a.emit("\n# callByRef ID  value*****************************");
             a.emit("movl", a.indirect(this.ve.getOffset(), "%ebp"), a.reg(free + 1));   // load addy from stack to register
             a.emit("movl", a.indirect(0,a.reg(free+1)), a.reg(free));  // load value at that address into register
-            a.emit("--------------------------------------------------\n");
+            a.emit("#--------------------------------------------------\n");
             a.unspill(free+1);
         }
         else
