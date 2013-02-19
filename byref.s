@@ -25,7 +25,6 @@ byref:
 # ID value*****************************
 	movl	8(%ebp),%esi
 	movl	(%esi),%ecx
-	
 
 	addl	%ecx,%eax
 	
