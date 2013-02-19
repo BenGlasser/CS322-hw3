@@ -2,7 +2,7 @@ void mini_main() {
   int x = 0;
 
   byref(x);
-//  print x;
+  print x;
 
 //  byval(x);
 //  print x;
