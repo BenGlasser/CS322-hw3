@@ -68,7 +68,8 @@ class Args {
             if (args.isByRef()){
                 a.emit("\n# comp args *************************");
                 //args.arg.compileExpr(a, pushed, 0);                   //compile arg
-                args.arg.compileRefToStack(a, pushed, 0, offset);
+                args.arg.compileToStack(a, pushed, 0, offset);
+                //args.arg.compileRefToStack(a, pushed, 0, offset);
                 a.emit("#************************************\n");
             }
             else
