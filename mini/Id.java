@@ -56,11 +56,10 @@ class Id extends Expr {
      *  registers in the process.
      */
     public void compileExpr(Assembly a, int pushed, int free) {
-        String offset = this.fromStackFrame(a).substring(0, this.fromStackFrame(a).indexOf('('));
         if (this.getVe().isByRef()){
             a.emit("\n# ID value*****************************");
-            a.emit("movl", this.fromStackFrame(a), a.reg(free + 1));
-            a.emit("movl", a.reg(free), a.indirect(0,a.reg(free+1)));
+            a.emit("movl", this.fromStackFrame(a), a.reg(free + 1));   // load addy from stack to register
+            a.emit("movl", a.indirect(0,a.reg(free+1)), a.reg(free));  // load value at that address into register
             a.emit("\n");
         }
         else

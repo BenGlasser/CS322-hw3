@@ -41,11 +41,10 @@ class Assign extends Expr {
      */
     public void compileExpr(Assembly a, int pushed, int free) {
         rhs.compileExpr(a, pushed, free);
-//        String offset = lhs.fromStackFrame(a).substring(0, lhs.fromStackFrame(a).indexOf('('));
         if (lhs.getVe().isByRef()){
             a.emit("\n# assign value*****************************");
-            a.emit("movl", lhs.fromStackFrame(a), a.reg(free + 1));
-            a.emit("movl", a.reg(free), a.indirect(0,a.reg(free+1)));
+            a.emit("movl", lhs.fromStackFrame(a), a.reg(free + 1));   // move address lhs reffers to into reg
+            a.emit("movl", a.reg(free), a.indirect(0,a.reg(free+1))); // load rhs into that address
             a.emit("\n");
         }
         else                                           {

@@ -48,6 +48,10 @@ public abstract class Expr {
         compileExpr(a, pushed, free);
         a.emit("movl", a.reg(free), a.indirect(offset, "%esp"));
     }
+    public void compileRefToStack(Assembly a, int pushed, int free, int offset) {
+        compileExpr(a, pushed, free);
+        a.emit("movl", a.reg(free), a.indirect(offset, "%esp"));
+    }
 
     /** Generate code that will evaluate this (boolean-valued) expression
      *  and jump to the specified label if the result is true.

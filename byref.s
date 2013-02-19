@@ -24,7 +24,7 @@ byref:
 	
 # ID value*****************************
 	movl	8(%ebp),%esi
-	movl	%ecx,(%esi)
+	movl	(%esi),%ecx
 	
 
 	addl	%ecx,%eax
@@ -37,7 +37,7 @@ byref:
 	
 # ID value*****************************
 	movl	8(%ebp),%ecx
-	movl	%eax,(%ecx)
+	movl	(%ecx),%eax
 	
 
 	pushl	%eax
@@ -52,12 +52,11 @@ mini_main:
 	movl	$0,%eax
 	movl	%eax,-4(%ebp)
 	subl	$4,%esp
-	movl	-4(%ebp),%eax
 	
-# comp args **********************************
+# comp args *************************
 	movl	(%esp),%ecx
 	movl	%eax,(%ecx)
-	#************************************************
+	#************************************
 
 	call	byref
 	addl	$4,%esp
@@ -71,23 +70,6 @@ mini_main:
 	movl	-4(%ebp),%eax
 	pushl	%eax
 	call	print
-	subl	$4,%esp
-	movl	$7,%eax
-	movl	$6,%ecx
-	imull	%ecx,%eax
-	
-# comp args **********************************
-	movl	(%esp),%ecx
-	movl	%eax,(%ecx)
-	#************************************************
-
-	call	byref
-	addl	$4,%esp
-	movl	$7,%eax
-	movl	$6,%ecx
-	imull	%ecx,%eax
-	movl	%eax,(%esp)
-	call	byval
 	movl	%ebp,%esp
 	popl	%ebp
 	ret
