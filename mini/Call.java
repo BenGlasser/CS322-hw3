@@ -70,7 +70,6 @@ class Call extends Expr {
 
     public void compileExpr(Assembly a, int pushed, int free) {
             int varBytes = 0;
-
             Args tmp = args;
 
             for (; tmp!=null; tmp=args.getRest()){
