@@ -50,7 +50,8 @@ public abstract class Expr {
     }
     public void compileRefToStack(Assembly a, int pushed, int free, int offset) {
         compileExpr(a, pushed, free);
-        a.emit("movl", a.reg(free), a.indirect(offset, "%esp"));
+        a.emit("movl", a.indirect(offset, "%esp"), a.reg(free+1));    // a.reg(free+1) now hold mem addy of esp at offset
+        a.emit("movl", a.reg(free), a.indirect(0, a.reg(free+1)));    // now we want to store the value of the compilation in that addy.
     }
 
     /** Generate code that will evaluate this (boolean-valued) expression

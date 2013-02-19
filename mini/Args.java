@@ -66,10 +66,9 @@ class Args {
     static void compileArgs(Assembly a, int pushed, Args args) {
         for (int offset=0; args!=null; args=args.rest) {
             if (args.isByRef()){
-                a.emit("\n# comp args *************************");
+                a.emit("\n# BOOGA *************************");
                 //args.arg.compileExpr(a, pushed, 0);                   //compile arg
-                a.emit("movl", a.indirect(offset, "%esp"), a.reg(1)); // a.reg(1) now hold mem addy of esp at offset
-                a.emit("movl", a.reg(0), a.indirect(0, a.reg(1)));    // now we want to store the value of the compilation in that addy.
+                args.arg.compileRefToStack(a, pushed, 0, offset);
                 a.emit("#************************************\n");
             }
             else

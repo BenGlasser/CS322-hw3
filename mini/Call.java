@@ -75,9 +75,7 @@ class Call extends Expr {
 
             for (; tmp!=null; tmp=args.getRest()){
                 if (tmp.isByRef() && !(tmp.getArg() instanceof Id) )
-
-                    varBytes += Assembly.WORDSIZE * tmp.getArg().getDepth()
-                            ;
+                    varBytes += Assembly.WORDSIZE * tmp.getArg().getDepth();
             }
 
             // spill registers if necessary
