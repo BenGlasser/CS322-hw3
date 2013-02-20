@@ -66,10 +66,10 @@ class Args {
     static void compileArgs(Assembly a, int pushed, Args args) {
         for (int offset=0; args!=null; args=args.rest) {
             if (args.isByRef()){
-                a.emit("\n# comp args *************************");
+                a.emit("#COMPILE ARGS--------------------------------------");
                 //args.arg.compileExpr(a, pushed, 0);                   //compile arg
-                args.arg.compileRefToStack(a, pushed, 0, offset);
-                a.emit("#************************************\n");
+                args.arg.compileToStack(a, pushed, 0, offset);
+                a.emit("#--------------------------------------------------");
             }
             else
                 // compile this argument, writing final value on the stack

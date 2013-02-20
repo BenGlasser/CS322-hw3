@@ -45,13 +45,18 @@ public abstract class Expr {
      *  write the resulting value into the stack at the specified offset.
      */
     public void compileToStack(Assembly a, int pushed, int free, int offset) {
+        a.emit("# COMPILE TO STACK-----------------------------------");
         compileExpr(a, pushed, free);
         a.emit("movl", a.reg(free), a.indirect(offset, "%esp"));
+        a.emit("# ---------------------------------------------------");
     }
     public void compileRefToStack(Assembly a, int pushed, int free, int offset) {
+        a.emit("# COMPILE REF TO STACK-------------------------------");
+        a.emit("movl", a.indirect(offset, "%ebp"), a.reg(free));    // a.reg(free+1) now hold mem addy of esp at offset
+        a.emit("movl", a.indirect(0,a.reg(free)), a.reg(free));  // now we want to store the value of the compilation in that addy.
         compileExpr(a, pushed, free);
-        a.emit("movl", a.indirect(offset, "%esp"), a.reg(free+1));    // a.reg(free+1) now hold mem addy of esp at offset
-        a.emit("movl", a.reg(free), a.indirect(0, a.reg(free+1)));    // now we want to store the value of the compilation in that addy.
+        a.emit("movl", a.reg(free), a.indirect(offset, "%esp"));
+        a.emit("# ---------------------------------------------------");
     }
 
     /** Generate code that will evaluate this (boolean-valued) expression

@@ -43,16 +43,16 @@ class Assign extends Expr {
         rhs.compileExpr(a, pushed, free);
         if (lhs.getVe().isByRef()){
             a.spill(free+1);
-            a.emit("\n# callByRef assign value*****************************");
+            a.emit("# ASSIGN REF---------------------------------------");
             a.emit("movl", lhs.fromStackFrame(a), a.reg(free + 1));   // move address lhs reffers to into reg
             a.emit("movl", a.reg(free), a.indirect(0,a.reg(free+1))); // load rhs into that address
-            a.emit("#--------------------------------------------------\n");
+            a.emit("#--------------------------------------------------");
             a.unspill(free+1);
         }
         else                                           {
-            a.emit("\n# assign value*****************************");
+            a.emit("# ASSIGN VAL---------------------------------------");
             a.emit("movl", a.reg(free), lhs.fromStackFrame(a));
-            a.emit("#--------------------------------------------------\n");
+            a.emit("#--------------------------------------------------");
         }
     }
 }

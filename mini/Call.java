@@ -72,10 +72,10 @@ class Call extends Expr {
             int varBytes = 0;
             Args tmp = args;
 
-//            for (; tmp!=null; tmp=args.getRest()){
-//                if (tmp.isByRef() && !(tmp.getArg() instanceof Id) )
-//                    varBytes += Assembly.WORDSIZE * tmp.getArg().getDepth();
-//            }
+            for (; tmp!=null; tmp=args.getRest()){
+                if (tmp.isByRef())
+                    varBytes += Assembly.WORDSIZE;
+            }
 
             // spill registers if necessary
             pushed += a.spillAll(free);

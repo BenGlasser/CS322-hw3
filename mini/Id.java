@@ -57,12 +57,10 @@ class Id extends Expr {
      */
     public void compileExpr(Assembly a, int pushed, int free) {
         if (this.getVe().isByRef()){
-            a.spill(free+1);
-            a.emit("\n# callByRef ID  value*****************************");
-            a.emit("movl", a.indirect(this.ve.getOffset(), "%ebp"), a.reg(free + 1));   // load addy from stack to register
-            a.emit("movl", a.indirect(0,a.reg(free+1)), a.reg(free));  // load value at that address into register
-            a.emit("#---------------------------------------------------\n");
-            a.unspill(free+1);
+            a.emit("# COMPILE EXPR REF-----------------------------------");
+            a.emit("movl", this.fromStackFrame(a), a.reg(free));     // load addy from stack to register
+            a.emit("movl", a.indirect(0,a.reg(free)), a.reg(free));  // load value at that address into register.
+            a.emit("# ---------------------------------------------------");
         }
         else
             a.emit("movl", this.fromStackFrame(a), a.reg(free));
