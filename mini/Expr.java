@@ -50,10 +50,10 @@ public abstract class Expr {
         a.emit("movl", a.reg(free), a.indirect(offset, "%esp"));
         a.emit("# ---------------------------------------------------");
     }
-    public void compileRefToStack(Assembly a, int pushed, int free, int offset, VarEnv env) {
+    public void compileRefToStack(Assembly a, int pushed, int free, int offset, int env) {
         a.emit("# COMPILE REF TO STACK-------------------------------");
         a.emit("movl", "%ebp", a.reg(free));                       // a.reg(free) now holds mem addy of ebp4
-        a.emit("addl", a.immed(env.getOffset()), a.reg(free));     // add offset of arg location
+        a.emit("addl", a.immed(env), a.reg(free));     // add offset of arg location
         a.emit("movl", a.reg(free), a.indirect(offset, "%esp"));   // now we want to push the addy on the stack.
         a.emit("# ---------------------------------------------------");
     }

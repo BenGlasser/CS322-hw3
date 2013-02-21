@@ -1,8 +1,10 @@
 	.file	"byref.s"
 	.globl	mini_main
 byval:
+	# PROLOGUE-------------------------------------------
 	pushl	%ebp
 	movl	%esp,%ebp
+	#----------------------------------------------------
 	movl	$1,%eax
 	movl	8(%ebp),%ecx
 	addl	%ecx,%eax
@@ -12,14 +14,18 @@ byval:
 	movl	8(%ebp),%eax
 	pushl	%eax
 	call	print
+	# EPILOGUE-------------------------------------------
 	movl	%ebp,%esp
 	popl	%ebp
 	ret
+	#----------------------------------------------------
 byref:
+	# PROLOGUE-------------------------------------------
 	pushl	%ebp
 	movl	%esp,%ebp
+	#----------------------------------------------------
 	movl	$1,%eax
-	# COMPILE EXPR REF-----------------------------------
+	# ID-------------------------------------------------
 	movl	8(%ebp),%ecx
 	movl	(%ecx),%ecx
 	# ---------------------------------------------------
@@ -28,22 +34,26 @@ byref:
 	movl	8(%ebp),%ecx
 	movl	%eax,(%ecx)
 	#--------------------------------------------------
-	# COMPILE EXPR REF-----------------------------------
+	# ID-------------------------------------------------
 	movl	8(%ebp),%eax
 	movl	(%eax),%eax
 	# ---------------------------------------------------
 	pushl	%eax
 	call	print
+	# EPILOGUE-------------------------------------------
 	movl	%ebp,%esp
 	popl	%ebp
 	ret
+	#----------------------------------------------------
 mini_main:
+	# PROLOGUE-------------------------------------------
 	pushl	%ebp
 	movl	%esp,%ebp
+	#----------------------------------------------------
 	subl	$4,%esp
 	movl	$0,%eax
 	movl	%eax,-4(%ebp)
-	subl	$8,%esp
+	subl	$12,%esp
 	#COMPILE ARGS--------------------------------------
 	# COMPILE REF TO STACK-------------------------------
 	movl	%ebp,%eax
@@ -52,7 +62,7 @@ mini_main:
 	# ---------------------------------------------------
 	#--------------------------------------------------
 	call	byref
-	addl	$8,%esp
+	addl	$12,%esp
 	movl	-4(%ebp),%eax
 	pushl	%eax
 	call	print
@@ -65,20 +75,20 @@ mini_main:
 	movl	-4(%ebp),%eax
 	pushl	%eax
 	call	print
-	subl	$4,%esp
+	subl	$8,%esp
 	#COMPILE ARGS--------------------------------------
-	movl	$7,%eax
-	movl	$6,%ecx
-	imull	%ecx,%eax
 	# COMPILE TO STACK-----------------------------------
 	movl	$7,%eax
 	movl	$6,%ecx
 	imull	%ecx,%eax
-	movl	%eax,(%esp)
+	movl	%eax,4(%esp)
 	# ---------------------------------------------------
+	movl	%esp,%eax
+	addl	$4,%eax
+	movl	%eax,(%esp)
 	#--------------------------------------------------
 	call	byref
-	addl	$4,%esp
+	addl	$8,%esp
 	# COMPILE TO STACK-----------------------------------
 	movl	$7,%eax
 	movl	$6,%ecx
@@ -86,6 +96,8 @@ mini_main:
 	movl	%eax,(%esp)
 	# ---------------------------------------------------
 	call	byval
+	# EPILOGUE-------------------------------------------
 	movl	%ebp,%esp
 	popl	%ebp
 	ret
+	#----------------------------------------------------

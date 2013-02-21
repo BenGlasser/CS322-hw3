@@ -57,7 +57,7 @@ class Id extends Expr {
      */
     public void compileExpr(Assembly a, int pushed, int free) {
         if (this.getVe().isByRef()){
-            a.emit("# COMPILE EXPR REF-----------------------------------");
+            a.emit("# ID-------------------------------------------------");
             a.emit("movl", this.fromStackFrame(a), a.reg(free));     // load addy from stack to register
             a.emit("movl", a.indirect(0,a.reg(free)), a.reg(free));  // load value at that address into register.
             a.emit("# ---------------------------------------------------");

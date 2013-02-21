@@ -306,8 +306,10 @@ public class Assembly {
      *  stack since the function was entered.
      */
     public int emitPrologue(int localBytes) {
+        emit("# PROLOGUE-------------------------------------------");
         emit("pushl", "%ebp");
         emit("movl",  "%esp", "%ebp");
+        emit("#----------------------------------------------------");
         pendingAdjust = localBytes;
         return localBytes + WORDSIZE;
     }
@@ -323,8 +325,10 @@ public class Assembly {
      */
     public void emitEpilogue() {
         pendingAdjust = 0;
+        emit("# EPILOGUE-------------------------------------------");
         emit("movl", "%ebp", "%esp");
         emit("popl", "%ebp");
         emit("ret");
+        emit("#----------------------------------------------------");
     }
 }

@@ -65,15 +65,21 @@ class Args {
      *  and save the results on the stack.
      */
     static void compileArgs(Assembly a, int pushed, Args args) {
+        int valueSpace = argBytes(args);
         for (int offset=0; args!=null; args=args.rest) {
             if (args.isByRef()){
                 a.emit("#COMPILE ARGS--------------------------------------");
                 //args.arg.compileExpr(a, pushed, 0);                   //compile arg
                 if (args.getArg() instanceof Id)
-                    args.arg.compileRefToStack(a, pushed, 0, offset, ((Id) args.getArg()).getVe());
+                    args.arg.compileRefToStack(a, pushed, 0, offset, ((Id) args.getArg()).getVe().getOffset());
                 else{
-                    args.arg.compileExpr(a, pushed, 0);
-                    args.arg.compileToStack(a, pushed, 0, offset);}
+                    // compile this argument, writing final value on the stack
+                    args.arg.compileToStack(a, pushed, 0, offset + valueSpace);
+                    //args.arg.compileRefToStack(a, pushed, 0, offset + Assembly.WORDSIZE, offset);
+                    a.emit("movl", "%esp", a.reg(0));              // a.reg(free) now holds mem addy of ebp4
+                    a.emit("addl", a.immed(offset + valueSpace), a.reg(0));     // add offset of arg location
+                    a.emit("movl", a.reg(0), a.indirect(offset, "%esp"));   // now we want to push the addy on the stack.
+                }
 
                 a.emit("#--------------------------------------------------");
 
