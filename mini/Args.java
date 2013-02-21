@@ -23,6 +23,7 @@ class Args {
     Args(Expr arg, Args rest) {
         this.arg = arg;
         this.rest = rest;
+
     }
 
     /** Return the argument at the front of this list.
@@ -68,8 +69,14 @@ class Args {
             if (args.isByRef()){
                 a.emit("#COMPILE ARGS--------------------------------------");
                 //args.arg.compileExpr(a, pushed, 0);                   //compile arg
-                args.arg.compileToStack(a, pushed, 0, offset);
+                if (args.getArg() instanceof Id)
+                    args.arg.compileRefToStack(a, pushed, 0, offset, ((Id) args.getArg()).getVe());
+                else{
+                    args.arg.compileExpr(a, pushed, 0);
+                    args.arg.compileToStack(a, pushed, 0, offset);}
+
                 a.emit("#--------------------------------------------------");
+
             }
             else
                 // compile this argument, writing final value on the stack

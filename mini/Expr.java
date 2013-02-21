@@ -50,12 +50,11 @@ public abstract class Expr {
         a.emit("movl", a.reg(free), a.indirect(offset, "%esp"));
         a.emit("# ---------------------------------------------------");
     }
-    public void compileRefToStack(Assembly a, int pushed, int free, int offset) {
+    public void compileRefToStack(Assembly a, int pushed, int free, int offset, VarEnv env) {
         a.emit("# COMPILE REF TO STACK-------------------------------");
-        a.emit("movl", a.indirect(offset, "%ebp"), a.reg(free));    // a.reg(free+1) now hold mem addy of esp at offset
-        a.emit("movl", a.indirect(0,a.reg(free)), a.reg(free));  // now we want to store the value of the compilation in that addy.
-        compileExpr(a, pushed, free);
-        a.emit("movl", a.reg(free), a.indirect(offset, "%esp"));
+        a.emit("movl", "%ebp", a.reg(free));                       // a.reg(free) now holds mem addy of ebp4
+        a.emit("addl", a.immed(env.getOffset()), a.reg(free));     // add offset of arg location
+        a.emit("movl", a.reg(free), a.indirect(offset, "%esp"));   // now we want to push the addy on the stack.
         a.emit("# ---------------------------------------------------");
     }
 

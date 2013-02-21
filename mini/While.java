@@ -43,7 +43,24 @@ class While extends Stmt {
         a.emit("jmp", lab2);
         a.emitLabel(lab1);
         body.compile(a, pushed);
+
+        //  If we hae encountered continues in the compilation of the body
+        //  we need to emit the break label to jump to here
+        if (!Continue.stack.isEmpty())
+            a.emitLabel(Continue.stack.pop());
+
         a.emitLabel(lab2);
+
+        if (test != null)
+            test.branchTrue(a, pushed, 0, lab1);
+        else
+            a.emit("jmp", lab2);
         test.branchTrue(a, pushed, 0, lab1);
+
+
+        //  If we hae encountered in breaks in the compilation of the body
+        //  we need to emit the break label to jump to here
+        if (!Break.stack.isEmpty())
+            a.emitLabel(Break.stack.pop());
     }
 }
