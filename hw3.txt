@@ -138,7 +138,7 @@ Question 3:
 The final task for this assignment is to extend the code generator in the
 MiniFun compiler to support passing of parameters by reference.  The
 parser in the supplied code has already been modified to support a
-(C++-inspired) syntax for call-by-reference by placing an & character
+(C++-inspired) syntax for call-by-reference by placing an '&' character
 between the type and the name in each formal parameter that should be
 passed by reference.  The following example illustrates this syntax (and
 there is a slightly larger example included in byref.mini):
