@@ -15,7 +15,7 @@ void mini_main() {
   for (; i<10; i=i+1) {
 //    break;
     print i;
-    total = total + 1;
+    total = total + i;
 //    continue;
   }
   print total;
