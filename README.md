@@ -34,36 +34,26 @@ command of the form "make prog".
 BUILDING & RUNNING:
 -------------------
 On my machine, I can build the Mini compiler as follows:
+- First run jacc and jflex to build the lexer and parser. YOU SHOULDN'T NEED TO DO THIS because I'm including the generated code already. However, for completness, here are the command lines that I use:
 
-- First run jacc and jflex to build the lexer and parser. YOU
-SHOULDN'T NEED TO DO THIS because I'm including the generated
-    code already. However, for completness, here are the command
-    lines that I use:
+    ```jacc mini/Mini.jacc```
+    
+    ```jflex mini/Mini.jflex```
 
-     jacc mini/Mini.jacc
-     jflex mini/Mini.jflex
+- Edit Line 24 of the code in mini/Assembly.java to specify your target platform. The current choices are LINUX, WINDOWS,   and MACOSX, so the corrected line should look something like    platform = LINUX, platform = WINDOWS, or platform = MACOSX.    Do not expect what follows to work correctly if you have not    followed this step!
+- Now compile the Java sources, including both generated and handwritten components:
 
-  - Edit Line 24 of the code in mini/Assembly.java to specify
-    your target platform. The current choices are LINUX, WINDOWS,
-    and MACOSX, so the corrected line should look something like
-    platform = LINUX, platform = WINDOWS, or platform = MACOSX.
-    Do not expect what follows to work correctly if you have not
-    followed this step!
-
-  - Now compile the Java sources, including both generated and
-    handwritten components:
-
-     javac compiler/*.java mini/*.java
+     ```javac compiler/*.java mini/*.java```
 
 For testing, I use commands like the following:
 
-  java mini.Compiler life.mini life.s
+  ```java mini.Compiler life.mini life.s
   gcc -m32 -o life life.s runtime.c
-  ./life
+  ./life```
 
-  java mini.Compiler funs.mini funs.s
+  ```java mini.Compiler funs.mini funs.s
   gcc -m32 -o funs funs.s runtime.c
-  ./funs
+  ./funs```
 
 The first line in each case invokes the Mini compiler to produce
 an assembly code output file. The second uses gcc to link the
