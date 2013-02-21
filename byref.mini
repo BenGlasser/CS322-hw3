@@ -16,7 +16,7 @@ void byref(int& y) {
   print y;
 }
 
-void byval(int y) {
+void byval(int& y) {
   y = y + 1;
   print y;
 }
